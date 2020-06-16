@@ -1,4 +1,4 @@
-# Hybride_Cloud
+# Hybrid_Cloud
 Complete AWS Auto Deploy  Web-Server infrastructure using Terraform
 
 Task 1
