@@ -144,7 +144,7 @@ provisioner "remote-exec" {
       "sudo mkfs.ext4  /dev/xvdh",
       "sudo mount  /dev/xvdh  /var/www/html",
       "sudo rm -rf /var/www/html/*",
-      "sudo git clone https://github.com/md-sabbir-khan/Hybride_Cloud.git /var/www/html/"
+      "sudo git clone https://github.com/md-sabbir-khan/Hybrid_Cloud.git /var/www/html/"
     ]
   }
 }
@@ -190,7 +190,7 @@ resource "aws_s3_bucket" "server-bucket" {
 
   provisioner "local-exec" {
   
-      command = "git clone https://github.com/md-sabbir-khan/Hybride_Cloud.git /root/task_1"
+      command = "git clone https://github.com/md-sabbir-khan/Hybrid_Cloud.git /root/task_1"
 
   }
 
