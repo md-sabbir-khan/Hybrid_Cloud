@@ -13,7 +13,7 @@ resource "tls_private_key" "terraform_key" {
   rsa_bits = "2048" 
 }
 
-
+#............... Download key................ 
 resource "local_file" "privet_key" {
     content     =tls_private_key.terraform_key.private_key_pem
     filename = "terraform.pem"
@@ -32,7 +32,7 @@ resource "aws_security_group" "terra_security" {
   description = "Allow webserver inbound traffic"
 
   ingress {
-    description = "SSH Port"         // alow ssh
+    description = "SSH Port"         # Allow ssh
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -40,14 +40,14 @@ resource "aws_security_group" "terra_security" {
   }
 
 ingress {
-    description = "HTTP Port"        // aloow http
+    description = "HTTP Port"        #Allow http
     from_port   = 80 
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]        
   }
 ingress {
-    description = "PING ICMP"        // alow ICMP for ping 
+    description = "PING ICMP"        # Allow ICMP for ping 
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
@@ -63,12 +63,12 @@ ingress {
   }
 
   tags = {
-    Name = "terraform_webserver"
+    Name = "terraform_webserver"       
   }
 }
 
 
-# creating Ec2 instance ......................
+# ................Createn Ec2 instance ......................
 
 
 resource "aws_instance" "web" {
@@ -76,8 +76,8 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   key_name = "terraform"
   security_groups = [ "webserver" ]
-                                       // subnet id: subnet-b6ebd1de
-
+                                       
+# ............Connect via SSH and install Requered Software................
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -114,7 +114,7 @@ resource "aws_volume_attachment" "ebs_attach" {
   device_name = "/dev/sdh"
   volume_id   = "${aws_ebs_volume.ebstest.id}"
   instance_id = "${aws_instance.web.id}"
-  force_detach = true                     // if it is false then terrform cant destroy the volume 
+  force_detach = true                     #if it is false then terrform cant destroy the volume, Alaways do False(Recomended)
 }
 
 
@@ -138,7 +138,7 @@ depends_on = [
     private_key = tls_private_key.terraform_key.private_key_pem 
     host     = aws_instance.web.public_ip
   }
-
+#............... Clone code from Github.................
 provisioner "remote-exec" {
     inline = [
       "sudo mkfs.ext4  /dev/xvdh",
@@ -173,9 +173,10 @@ resource "null_resource" "nulllocal1" {
   depends_on = [
   null_resource.nullremote1,
   ]
+	#................. Automatically open website on the Chrome Browser...................
 provisioner "local-exec" {
-  #command = "chrome  ${aws_instance.web.public_ip}"
-   command = "curl  ${aws_instance.web.public_ip}"
+  command = "chrome  ${aws_instance.web.public_ip}"
+   
   }
 }
 
@@ -196,6 +197,7 @@ resource "aws_s3_bucket" "server-bucket" {
 
 
  }
+#............ uploading Object on S3 Bucket...........
 resource "aws_s3_bucket_object" "image_upload" {
   bucket = aws_s3_bucket.server-bucket.bucket
   key 	="vimal.jpg"
