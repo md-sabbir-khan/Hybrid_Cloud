@@ -283,7 +283,7 @@ resource "aws_cloudfront_distribution" "distribution" {
      provisioner "remote-exec" {
         inline  = [
             
-            "echo '<img src='http://${aws_cloudfront_distribution.distribution.domain_name}/vimal.jpg' width='500' height='500'>' | sudo tee -a /var/www/html/index.html",
+            "echo '<img src='http://${aws_cloudfront_distribution.distribution.domain_name}/vimal.jpg' width='500' height='500' class='center'>' | sudo tee -a /var/www/html/index.html",
             
            ]
      } 
